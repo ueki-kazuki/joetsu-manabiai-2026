@@ -27,7 +27,7 @@ def main():
     じぶん = Rect(よこ, たて, はば, たかさ)  # 四角形（プレイヤー）
     じぶんのいろ = (255, 0, 0)  # 色の設定（赤）
     とけい = pygame.time.Clock()  # 時間管理用オブジェクトの作成
-    てき = Rect(random.randrange(0, がめんはば), 0, はば, たかさ)
+    てきたち = [Rect(random.randrange(0, がめんはば), 0, はば, たかさ)]  # 敵を管理用のリスト
     てきのいろ = (0, 0, 255)  # 色の設定（青）
     たまのおおきさ = 10  # 弾の大きさ
 
@@ -43,19 +43,19 @@ def main():
             )  # 弾の描画処理
             if item.y < 0:  # 弾が画面外に出た場合
                 たま.pop(i)  # 弾の削除
-            if てき and てき.x <= item.x <= てき.x + はば and てき.y <= item.y <= てき.y + たかさ:
-                del てき
+            for j, てき in enumerate(てきたち):  # 敵の数だけ繰り返し
+                if てき.x <= item.x <= てき.x + はば and てき.y <= item.y <= てき.y + たかさ:
+                    てきたち.pop(j)  # 敵の削除
 
-        if てき:
+        for i, てき in enumerate(てきたち):  # 敵の数だけ繰り返し
             てき.move_ip(0, てきのそくど)  # 敵の移動処理
-        else:
-            カウンタ = てきのでにくさ
-
-        pygame.draw.rect(がめん, てきのいろ, てき)  # 敵の描画処理
+            pygame.draw.rect(がめん, てきのいろ, てき)  # 敵の描画処理
+            if てき.y > がめんたかさ:  # 敵が画面外に出た場合
+                てきたち.pop(i)  # 敵の削除
 
         カウンタ += 1  # カウンタ増加
         if カウンタ > てきのでにくさ:  # 出現間隔チェック
-            てき = Rect(random.randrange(0, がめんはば), 0, はば, たかさ)  # 敵生成
+            てきたち.append(Rect(random.randrange(0, がめんはば), 0, はば, たかさ))  # 敵生成
             カウンタ = 0  # カウンタ初期化
 
         pygame.display.update()  # 描画の更新
