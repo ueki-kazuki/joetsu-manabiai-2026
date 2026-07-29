@@ -1,6 +1,7 @@
 import pygame  # pygame（ゲームエンジン）をインポート
 from pygame.locals import QUIT, KEYDOWN, K_ESCAPE, MOUSEMOTION, MOUSEBUTTONDOWN, Rect
 import random
+import os
 
 
 def main():
@@ -13,6 +14,8 @@ def main():
     (いどうそくど, たまのそくど, てきのそくど) = (10, 10, 10)  # 移動速度（弾）と敵
     カウンタ = 0  # カウンタ（敵の出現管理）
     てきのでにくさ = 50  # 敵の出現間隔
+    がぞうモード = False  # 画像で表示するかどうか
+    がぞうフォルダ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "images")  # 画像の場所
 
 
     # しょりかいし
@@ -27,17 +30,26 @@ def main():
     てき = Rect(random.randrange(0, がめんはば), 0, はば, たかさ)
     てきのいろ = (0, 0, 255)  # 色の設定（青）
     たまのおおきさ = 10  # 弾の大きさ
+    じぶんのがぞう = pygame.image.load(os.path.join(がぞうフォルダ, "player.png")).convert_alpha()  # 自機の画像
+    てきのがぞう = pygame.image.load(os.path.join(がぞうフォルダ, "enemy.png")).convert_alpha()  # 敵の画像
+    たまのがぞう = pygame.image.load(os.path.join(がぞうフォルダ, "bullet.png")).convert_alpha()  # 弾の画像
 
     # ゲームのメインループ
     while True:  # イベント処理用ループ
         がめん.fill((0, 0, 0))  # 黒で塗りつぶす
-        pygame.draw.rect(がめん, じぶんのいろ, じぶん)  # 四角形（プレイヤー）
+        if がぞうモード:  # 画像で表示する場合
+            がめん.blit(じぶんのがぞう, じぶん)  # 画像（プレイヤー）
+        else:
+            pygame.draw.rect(がめん, じぶんのいろ, じぶん)  # 四角形（プレイヤー）
 
         for i, item in enumerate(たま):  # 弾の数だけ繰り返し
             item.move_ip(0, -たまのそくど)  # 弾の移動処理
-            pygame.draw.circle(
-                がめん, (0, 255, 0), (item.x, item.y), item.w / 2
-            )  # 弾の描画処理
+            if がぞうモード:  # 画像で表示する場合
+                がめん.blit(たまのがぞう, item)  # 画像（弾）
+            else:
+                pygame.draw.circle(
+                    がめん, (0, 255, 0), (item.x, item.y), item.w / 2
+                )  # 弾の描画処理
             if item.y < 0:  # 弾が画面外に出た場合
                 たま.pop(i)  # 弾の削除
             if てき and てき.x <= item.x <= てき.x + はば and てき.y <= item.y <= てき.y + たかさ:
@@ -48,7 +60,10 @@ def main():
         else:
             カウンタ = てきのでにくさ
 
-        pygame.draw.rect(がめん, てきのいろ, てき)  # 敵の描画処理
+        if がぞうモード:  # 画像で表示する場合
+            がめん.blit(てきのがぞう, てき)  # 画像（敵）
+        else:
+            pygame.draw.rect(がめん, てきのいろ, てき)  # 敵の描画処理
 
         カウンタ += 1  # カウンタ増加
         if カウンタ > てきのでにくさ:  # 出現間隔チェック
@@ -73,6 +88,8 @@ def main():
                 イベント.type == KEYDOWN and イベント.key == K_ESCAPE
             ):  # エスケープキーが押された場合
                 return
+            elif イベント.type == KEYDOWN and イベント.key == pygame.K_i:  # 「い」キーが押された場合
+                がぞうモード = not がぞうモード  # 画像で表示するかどうかを切りかえる
             elif (
                 イベント.type == MOUSEBUTTONDOWN and イベント.button == 1
             ):  # マウスをクリックした場合
