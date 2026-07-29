@@ -1,6 +1,5 @@
 import pygame  # pygame（ゲームエンジン）をインポート
-from pygame.locals import QUIT, KEYDOWN, K_ESCAPE, MOUSEMOTION, MOUSEBUTTONDOWN, Rect
-from pygame._sdl2.video import Window
+from pygame.locals import QUIT, KEYDOWN, K_ESCAPE, MOUSEBUTTONDOWN, Rect
 import random
 import os
 
@@ -18,28 +17,38 @@ def main():
     とくてん = 0  # とくてん
     ゲームオーバー = False  # ゲームオーバーかどうか
     がぞうモード = False  # 画像で表示するかどうか
-    がぞうフォルダ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "images")  # 画像の場所
-
+    がぞうフォルダ = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "images"
+    )  # 画像の場所
 
     # しょりかいし
     # がめんをしょきかする
     pygame.init()  # ライブラリの初期化
-    pygame.display.set_caption("超絶怒涛シューティング")  # ウインドウのタイトル設定
-    がめん = pygame.display.set_mode((がめんはば, がめんたかさ))  # 画面サイズをw，hで設定
-    まど = Window.from_display_module()  # 今のウインドウを取得
+    まど = pygame.Window(
+        "超絶怒涛シューティング", size=(がめんはば, がめんたかさ)
+    )  # ウインドウの作成
     まど.focus()  # ウインドウを他より前に出す
+    がめん = まど.get_surface()  # 画面のサーフェスを取得
 
     じぶん = Rect(よこ, たて, はば, たかさ)  # 四角形（プレイヤー）
     じぶんのいろ = (255, 0, 0)  # 色の設定（赤）
     とけい = pygame.time.Clock()  # 時間管理用オブジェクトの作成
-    てきたち = [Rect(random.randrange(0, がめんはば - はば + 1), 0, はば, たかさ)]  # 敵を管理用のリスト
+    てきたち = [
+        Rect(random.randrange(0, がめんはば - はば + 1), 0, はば, たかさ)
+    ]  # 敵を管理用のリスト
     てきのいろ = (0, 0, 255)  # 色の設定（青）
     たまのおおきさ = 10  # 弾の大きさ
     たまのかんかく = 10  # たまを発射できる間隔（フレーム数）
     たまのカウンタ = 0  # 前のたまからの経過フレーム数
-    じぶんのがぞう = pygame.image.load(os.path.join(がぞうフォルダ, "player.png")).convert_alpha()  # 自機の画像
-    てきのがぞう = pygame.image.load(os.path.join(がぞうフォルダ, "enemy.png")).convert_alpha()  # 敵の画像
-    たまのがぞう = pygame.image.load(os.path.join(がぞうフォルダ, "bullet.png")).convert_alpha()  # 弾の画像
+    じぶんのがぞう = pygame.image.load(
+        os.path.join(がぞうフォルダ, "player.png")
+    ).convert_alpha()  # 自機の画像
+    てきのがぞう = pygame.image.load(
+        os.path.join(がぞうフォルダ, "enemy.png")
+    ).convert_alpha()  # 敵の画像
+    たまのがぞう = pygame.image.load(
+        os.path.join(がぞうフォルダ, "bullet.png")
+    ).convert_alpha()  # 弾の画像
     フォント = pygame.font.Font(None, 40)  # もじの表示用
 
     # ゲームのメインループ
@@ -61,7 +70,10 @@ def main():
                     )  # 弾の描画処理
                 たまがあたった = False  # たまが敵にあたったかどうか
                 for j, てき in enumerate(てきたち):  # 敵の数だけ繰り返し
-                    if てき.x <= item.x <= てき.x + はば and てき.y <= item.y <= てき.y + たかさ:
+                    if (
+                        てき.x <= item.x <= てき.x + はば
+                        and てき.y <= item.y <= てき.y + たかさ
+                    ):
                         てきたち.pop(j)  # 敵の削除
                         とくてん += 10  # とくてん加算
                         たまがあたった = True
@@ -82,18 +94,32 @@ def main():
 
             カウンタ += 1  # カウンタ増加
             if カウンタ > てきのでにくさ:  # 出現間隔チェック
-                てきたち.append(Rect(random.randrange(0, がめんはば - はば + 1), 0, はば, たかさ))  # 敵生成
+                てきたち.append(
+                    Rect(random.randrange(0, がめんはば - はば + 1), 0, はば, たかさ)
+                )  # 敵生成
                 カウンタ = 0  # カウンタ初期化
 
-        とくてんもじ = フォント.render(f"SCORE {とくてん}", True, (255, 255, 255))  # とくてんの表示
+        とくてんもじ = フォント.render(
+            f"SCORE {とくてん}", True, (255, 255, 255)
+        )  # とくてんの表示
         がめん.blit(とくてんもじ, (10, 10))
         if ゲームオーバー:  # ゲームオーバーの場合
             ゲームオーバーもじ = フォント.render("GAME OVER", True, (255, 255, 255))
-            がめん.blit(ゲームオーバーもじ, ゲームオーバーもじ.get_rect(center=(がめんはば // 2, がめんたかさ // 2)))
-            あんないもじ = フォント.render("PRESS ENTER TO RESTART", True, (255, 255, 255))  # あんないの表示
-            がめん.blit(あんないもじ, あんないもじ.get_rect(center=(がめんはば // 2, がめんたかさ // 2 + 40)))
+            がめん.blit(
+                ゲームオーバーもじ,
+                ゲームオーバーもじ.get_rect(
+                    center=(がめんはば // 2, がめんたかさ // 2)
+                ),
+            )
+            あんないもじ = フォント.render(
+                "PRESS ENTER TO RESTART", True, (255, 255, 255)
+            )  # あんないの表示
+            がめん.blit(
+                あんないもじ,
+                あんないもじ.get_rect(center=(がめんはば // 2, がめんたかさ // 2 + 40)),
+            )
 
-        pygame.display.update()  # 描画の更新
+        まど.flip()  # 描画の更新
 
         とけい.tick(fps)  # FPSの設定
         if not ゲームオーバー:  # ゲームオーバーでない場合だけ動かす
@@ -103,8 +129,12 @@ def main():
                 じぶん.move_ip(-いどうそくど, 0)
             elif pressed_keys[pygame.K_RIGHT]:  # 右矢印キーが押された場合
                 じぶん.move_ip(いどうそくど, 0)
-            elif pressed_keys[pygame.K_SPACE] and たまのカウンタ >= たまのかんかく:  # スペースキーが押された場合
-                たま.append(Rect(じぶん.x + はば / 2, じぶん.y, たまのおおきさ, たまのおおきさ))  # 円（弾））
+            elif (
+                pressed_keys[pygame.K_SPACE] and たまのカウンタ >= たまのかんかく
+            ):  # スペースキーが押された場合
+                たま.append(
+                    Rect(じぶん.x + はば / 2, じぶん.y, たまのおおきさ, たまのおおきさ)
+                )  # 円（弾））
                 たまのカウンタ = 0  # カウンタ初期化
             if じぶん.x < 0:  # 左はしより外に出た場合
                 じぶん.x = 0
@@ -118,20 +148,28 @@ def main():
                 イベント.type == KEYDOWN and イベント.key == K_ESCAPE
             ):  # エスケープキーが押された場合
                 return
-            elif イベント.type == KEYDOWN and イベント.key == pygame.K_i:  # 「い」キーが押された場合
+            elif (
+                イベント.type == KEYDOWN and イベント.key == pygame.K_i
+            ):  # 「い」キーが押された場合
                 がぞうモード = not がぞうモード  # 画像で表示するかどうかを切りかえる
             elif (
-                イベント.type == KEYDOWN and イベント.key == pygame.K_RETURN and ゲームオーバー
+                イベント.type == KEYDOWN
+                and イベント.key == pygame.K_RETURN
+                and ゲームオーバー
             ):  # ゲームオーバー中にエンターキーが押された場合
                 じぶん = Rect(よこ, たて, はば, たかさ)  # 自機をもとの位置にもどす
                 たま = []  # 弾を消す
-                てきたち = [Rect(random.randrange(0, がめんはば - はば + 1), 0, はば, たかさ)]  # 敵をもとにもどす
+                てきたち = [
+                    Rect(random.randrange(0, がめんはば - はば + 1), 0, はば, たかさ)
+                ]  # 敵をもとにもどす
                 カウンタ = 0  # カウンタをもとにもどす
                 とくてん = 0  # とくてんをもとにもどす
                 たまのカウンタ = 0  # たまのカウンタをもとにもどす
                 ゲームオーバー = False  # ゲームオーバーをかいじょ
             elif (
-                イベント.type == MOUSEBUTTONDOWN and イベント.button == 1 and not ゲームオーバー
+                イベント.type == MOUSEBUTTONDOWN
+                and イベント.button == 1
+                and not ゲームオーバー
             ):  # マウスをクリックした場合
                 cx, cy = イベント.pos  # クリック時のマウス座標を取得
                 cx += はば / 2
