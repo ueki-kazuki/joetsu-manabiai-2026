@@ -59,12 +59,15 @@ def main():
                     pygame.draw.circle(
                         がめん, (0, 255, 0), (item.x, item.y), item.w / 2
                     )  # 弾の描画処理
-                if item.y < 0:  # 弾が画面外に出た場合
-                    たま.pop(i)  # 弾の削除
+                たまがあたった = False  # たまが敵にあたったかどうか
                 for j, てき in enumerate(てきたち):  # 敵の数だけ繰り返し
                     if てき.x <= item.x <= てき.x + はば and てき.y <= item.y <= てき.y + たかさ:
                         てきたち.pop(j)  # 敵の削除
                         とくてん += 10  # とくてん加算
+                        たまがあたった = True
+                        break
+                if item.y < 0 or たまがあたった:  # 弾が画面外に出たか敵にあたった場合
+                    たま.pop(i)  # 弾の削除
 
             for i, てき in enumerate(てきたち):  # 敵の数だけ繰り返し
                 てき.move_ip(0, てきのそくど)  # 敵の移動処理
@@ -87,6 +90,8 @@ def main():
         if ゲームオーバー:  # ゲームオーバーの場合
             ゲームオーバーもじ = フォント.render("GAME OVER", True, (255, 255, 255))
             がめん.blit(ゲームオーバーもじ, ゲームオーバーもじ.get_rect(center=(がめんはば // 2, がめんたかさ // 2)))
+            あんないもじ = フォント.render("PRESS ENTER TO RESTART", True, (255, 255, 255))  # あんないの表示
+            がめん.blit(あんないもじ, あんないもじ.get_rect(center=(がめんはば // 2, がめんたかさ // 2 + 40)))
 
         pygame.display.update()  # 描画の更新
 
