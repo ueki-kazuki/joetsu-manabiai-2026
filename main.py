@@ -112,6 +112,15 @@ def main():
             elif イベント.type == KEYDOWN and イベント.key == pygame.K_i:  # 「い」キーが押された場合
                 がぞうモード = not がぞうモード  # 画像で表示するかどうかを切りかえる
             elif (
+                イベント.type == KEYDOWN and イベント.key == pygame.K_SPACE and ゲームオーバー
+            ):  # ゲームオーバー中にスペースキーが押された場合
+                じぶん = Rect(よこ, たて, はば, たかさ)  # 自機をもとの位置にもどす
+                たま = []  # 弾を消す
+                てきたち = [Rect(random.randrange(0, がめんはば), 0, はば, たかさ)]  # 敵をもとにもどす
+                カウンタ = 0  # カウンタをもとにもどす
+                とくてん = 0  # とくてんをもとにもどす
+                ゲームオーバー = False  # ゲームオーバーをかいじょ
+            elif (
                 イベント.type == MOUSEBUTTONDOWN and イベント.button == 1 and not ゲームオーバー
             ):  # マウスをクリックした場合
                 cx, cy = イベント.pos  # クリック時のマウス座標を取得
