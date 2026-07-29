@@ -1,5 +1,6 @@
 import pygame  # pygame（ゲームエンジン）をインポート
 from pygame.locals import QUIT, KEYDOWN, K_ESCAPE, MOUSEMOTION, MOUSEBUTTONDOWN, Rect
+from pygame._sdl2.video import Window
 import random
 
 
@@ -20,6 +21,8 @@ def main():
     pygame.init()  # ライブラリの初期化
     pygame.display.set_caption("超絶怒涛シューティング")  # ウインドウのタイトル設定
     がめん = pygame.display.set_mode((がめんはば, がめんたかさ))  # 画面サイズをw，hで設定
+    まど = Window.from_display_module()  # 今のウインドウを取得
+    まど.focus()  # ウインドウを他より前に出す
 
     じぶん = Rect(よこ, たて, はば, たかさ)  # 四角形（プレイヤー）
     じぶんのいろ = (255, 0, 0)  # 色の設定（赤）
