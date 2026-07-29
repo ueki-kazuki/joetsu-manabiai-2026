@@ -32,9 +32,11 @@ def main():
     じぶん = Rect(よこ, たて, はば, たかさ)  # 四角形（プレイヤー）
     じぶんのいろ = (255, 0, 0)  # 色の設定（赤）
     とけい = pygame.time.Clock()  # 時間管理用オブジェクトの作成
-    てきたち = [Rect(random.randrange(0, がめんはば), 0, はば, たかさ)]  # 敵を管理用のリスト
+    てきたち = [Rect(random.randrange(0, がめんはば - はば + 1), 0, はば, たかさ)]  # 敵を管理用のリスト
     てきのいろ = (0, 0, 255)  # 色の設定（青）
     たまのおおきさ = 10  # 弾の大きさ
+    たまのかんかく = 10  # たまを発射できる間隔（フレーム数）
+    たまのカウンタ = 0  # 前のたまからの経過フレーム数
     じぶんのがぞう = pygame.image.load(os.path.join(がぞうフォルダ, "player.png")).convert_alpha()  # 自機の画像
     てきのがぞう = pygame.image.load(os.path.join(がぞうフォルダ, "enemy.png")).convert_alpha()  # 敵の画像
     たまのがぞう = pygame.image.load(os.path.join(がぞうフォルダ, "bullet.png")).convert_alpha()  # 弾の画像
@@ -77,7 +79,7 @@ def main():
 
             カウンタ += 1  # カウンタ増加
             if カウンタ > てきのでにくさ:  # 出現間隔チェック
-                てきたち.append(Rect(random.randrange(0, がめんはば), 0, はば, たかさ))  # 敵生成
+                てきたち.append(Rect(random.randrange(0, がめんはば - はば + 1), 0, はば, たかさ))  # 敵生成
                 カウンタ = 0  # カウンタ初期化
 
         とくてんもじ = フォント.render(f"SCORE {とくてん}", True, (255, 255, 255))  # とくてんの表示
@@ -90,13 +92,15 @@ def main():
 
         とけい.tick(fps)  # FPSの設定
         if not ゲームオーバー:  # ゲームオーバーでない場合だけ動かす
+            たまのカウンタ += 1  # カウンタ増加
             pressed_keys = pygame.key.get_pressed()
             if pressed_keys[pygame.K_LEFT]:  # 左矢印キーが押された場合
                 じぶん.move_ip(-いどうそくど, 0)
             elif pressed_keys[pygame.K_RIGHT]:  # 右矢印キーが押された場合
                 じぶん.move_ip(いどうそくど, 0)
-            elif pressed_keys[pygame.K_SPACE]:  # スペースキーが押された場合
+            elif pressed_keys[pygame.K_SPACE] and たまのカウンタ >= たまのかんかく:  # スペースキーが押された場合
                 たま.append(Rect(じぶん.x + はば / 2, じぶん.y, たまのおおきさ, たまのおおきさ))  # 円（弾））
+                たまのカウンタ = 0  # カウンタ初期化
             if じぶん.x < 0:  # 左はしより外に出た場合
                 じぶん.x = 0
             elif じぶん.x > がめんはば - はば:  # 右はしより外に出た場合
@@ -112,13 +116,14 @@ def main():
             elif イベント.type == KEYDOWN and イベント.key == pygame.K_i:  # 「い」キーが押された場合
                 がぞうモード = not がぞうモード  # 画像で表示するかどうかを切りかえる
             elif (
-                イベント.type == KEYDOWN and イベント.key == pygame.K_SPACE and ゲームオーバー
-            ):  # ゲームオーバー中にスペースキーが押された場合
+                イベント.type == KEYDOWN and イベント.key == pygame.K_RETURN and ゲームオーバー
+            ):  # ゲームオーバー中にエンターキーが押された場合
                 じぶん = Rect(よこ, たて, はば, たかさ)  # 自機をもとの位置にもどす
                 たま = []  # 弾を消す
-                てきたち = [Rect(random.randrange(0, がめんはば), 0, はば, たかさ)]  # 敵をもとにもどす
+                てきたち = [Rect(random.randrange(0, がめんはば - はば + 1), 0, はば, たかさ)]  # 敵をもとにもどす
                 カウンタ = 0  # カウンタをもとにもどす
                 とくてん = 0  # とくてんをもとにもどす
+                たまのカウンタ = 0  # たまのカウンタをもとにもどす
                 ゲームオーバー = False  # ゲームオーバーをかいじょ
             elif (
                 イベント.type == MOUSEBUTTONDOWN and イベント.button == 1 and not ゲームオーバー
