@@ -4,7 +4,6 @@
 
 This repository is a small pygame shooting-game teaching project.
 
-- `main.py` is the complete reference game.
 - `mondai.py` is the student debugging exercise; `mondai_kotae.py` is its completed answer.
 - The optional extension challenge is included at the end of `mondai.py`; its completed version is in `mondai_kotae.py`.
 - `images/` contains the player, enemy, and bullet PNG assets.
@@ -19,9 +18,8 @@ Use `uv` from the repository root:
 
 ```sh
 uv sync                         # Install the locked environment
-uv run python main.py           # Run the reference game
 uv run python mondai.py         # Run the student exercise
-uv run python -m py_compile main.py mondai.py mondai_kotae.py
+uv run python -m py_compile mondai.py mondai_kotae.py
 uv run ruff check .             # Static checks
 uv run ruff format --check .    # Verify formatting
 ```
