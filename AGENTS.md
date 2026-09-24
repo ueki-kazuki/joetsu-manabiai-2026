@@ -6,7 +6,7 @@ This repository is a small pygame shooting-game teaching project.
 
 - `main.py` is the complete reference game.
 - `mondai.py` is the student debugging exercise; `mondai_kotae.py` is its completed answer.
-- `hatten.py` and `hatten_kotae.py` contain the optional extension challenge and answer.
+- The optional extension challenge is included at the end of `mondai.py`; its completed version is in `mondai_kotae.py`.
 - `images/` contains the player, enemy, and bullet PNG assets.
 - `デバッグチャレンジ.docx` is the classroom handout.
 - `pyproject.toml` and `uv.lock` define the Python 3.14 environment and dependencies.
@@ -21,8 +21,7 @@ Use `uv` from the repository root:
 uv sync                         # Install the locked environment
 uv run python main.py           # Run the reference game
 uv run python mondai.py         # Run the student exercise
-uv run python hatten.py         # Run the extension exercise
-uv run python -m py_compile main.py mondai.py mondai_kotae.py hatten.py hatten_kotae.py
+uv run python -m py_compile main.py mondai.py mondai_kotae.py
 uv run ruff check .             # Static checks
 uv run ruff format --check .    # Verify formatting
 ```
