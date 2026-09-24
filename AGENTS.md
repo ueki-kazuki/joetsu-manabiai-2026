@@ -8,7 +8,7 @@ This repository is a small pygame shooting-game teaching project.
 - `mondai.py` is the student debugging exercise; `mondai_kotae.py` is its completed answer.
 - The optional extension challenge is included at the end of `mondai.py`; its completed version is in `mondai_kotae.py`.
 - `images/` contains the player, enemy, and bullet PNG assets.
-- `デバッグチャレンジ.docx` is the classroom handout.
+- `デバッグチャレンジ.md` is the master classroom guide and student-slide source.
 - `pyproject.toml` and `uv.lock` define the Python 3.14 environment and dependencies.
 
 There is currently no dedicated test directory or automated test suite.
