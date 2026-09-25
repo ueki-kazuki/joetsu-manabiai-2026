@@ -4,19 +4,34 @@ Python と pygame-ce で作った、シンプルなシューティングゲー�
 
 ## 必要なもの
 
-- Python 3.14 以上
-- pip
+- macOS
+- Anaconda または Miniconda
+- Python 3.12
 
 依存ライブラリは `requirements.txt` で管理しています。
 
-## 起動方法
+## 環境の作成
 
-リポジトリのルートで次を実行します。
+ターミナルで、リポジトリのルートから次を実行します。
 
 ```sh
+conda create -n mokumoku_20260926 python=3.12
+conda activate mokumoku_20260926
 python -m pip install -r requirements.txt
+```
+
+`cond activate` ではなく、正しくは `conda activate` です。
+
+## 起動方法
+
+仮想環境を有効にしてから、リポジトリのルートで実行します。
+
+```sh
+conda activate mokumoku_20260926
 python main.py
 ```
+
+VS Codeでは、Pythonインタープリターに `mokumoku_20260926` 環境を選択してください。
 
 `images/` フォルダの `player.png`、`enemy.png`、`bullet.png` を読み込むため、`main.py` と画像フォルダの位置は変更しないでください。
 
